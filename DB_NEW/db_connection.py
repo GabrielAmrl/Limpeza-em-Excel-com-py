@@ -1,6 +1,4 @@
-import webbrowser
 import redshift_connector
-import time
 
 def conectar():
     return redshift_connector.connect(
@@ -17,33 +15,3 @@ def conectar():
         idp_response_timeout=50,
         scope='api://enel.com/bb52aafd-bf62-4722-9757-db5350d0ab8d/.default'
     )
-
-def query(sql, conn, tentativas=3):
-    for i in range(tentativas):
-        try:
-            cursor = conn.cursor()
-            cursor.execute(sql)
-            return cursor, conn
-        except Exception:
-            print(f"⚠️ Conexão perdida, reconectando... (tentativa {i+1}/{tentativas})")
-            try:
-                conn = conectar()
-                print("✅ Reconectado!")
-            except Exception as e:
-                print(f"❌ Falha ao reconectar: {e}")
-                time.sleep(3)
-    raise Exception("❌ Não foi possível reconectar após várias tentativas.")
-
-def query_df(sql, conn):
-    import pandas as pd
-    cursor, conn = query(sql, conn)
-    df = pd.DataFrame(cursor.fetchall(), columns=[d[0] for d in cursor.description])
-    return df, conn
-
-# Inicia conexão
-try:
-    conn = conectar()
-    print("✅ Conexão bem-sucedida! Aguardando demanda...")
-except Exception as e:
-    print(f"❌ Falha na conexão inicial: {e}")
-    conn = None

@@ -102,3 +102,5 @@ if __name__ == "__main__":
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     df.to_excel(output_path, index=False)
     print(f"Arquivo salvo em: {output_path}")
+
+    
