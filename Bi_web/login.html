@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enel Brasil · BI Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0f1c;
+        --panel: #0d1426;
+        --surface: #111b30;
+        --surface-2: #0f1830;
+        --border: #1f2c47;
+        --border-soft: #172238;
+        --text: #eaf0fb;
+        --text-muted: #7e8caa;
+        --text-faint: #4c5972;
+        --teal: #2dd4bf;
+        --teal-dim: #1a8f80;
+        --amber: #f5a623;
+        --danger: #e2574c;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+        display: flex;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      ::selection {
+        background: var(--teal);
+        color: #06241f;
+      }
+
+      *:focus-visible {
+        outline: 2px solid var(--teal);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+
+      .stage {
+        position: relative;
+        flex: 1.4;
+        min-width: 0;
+        background:
+          radial-gradient(
+            ellipse 900px 600px at 20% 15%,
+            rgba(45, 212, 191, 0.1),
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 700px 500px at 80% 85%,
+            rgba(245, 166, 35, 0.08),
+            transparent 60%
+          ),
+          var(--panel);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 56px 56px 36px;
+        border-right: 1px solid var(--border);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-logo {
+        height: 44px;
+        width: auto;
+        display: block;
+      }
+
+      .stage-copy {
+        max-width: 520px;
+        margin-top: 8px;
+      }
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11.5px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--teal);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 22px;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--teal);
+        box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.6);
+        animation: livedot 2.2s ease-out infinite;
+      }
+      @keyframes livedot {
+        0% {
+          box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.55);
+        }
+        70% {
+          box-shadow: 0 0 0 8px rgba(45, 212, 191, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(45, 212, 191, 0);
+        }
+      }
+
+      .stage-copy h1 {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        font-size: clamp(28px, 3.4vw, 40px);
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        color: var(--text);
+      }
+      .stage-copy h1 em {
+        font-style: normal;
+        color: var(--text-muted);
+      }
+      .stage-copy p {
+        margin-top: 16px;
+        font-size: 14.5px;
+        line-height: 1.6;
+        color: var(--text-muted);
+        max-width: 420px;
+      }
+
+      .network-wrap {
+        position: relative;
+        flex: 1;
+        margin: 32px -10px;
+        min-height: 0;
+      }
+      .network-wrap svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .grid-line {
+        fill: none;
+        stroke: var(--border);
+        stroke-width: 1.4;
+      }
+      .pulse-line {
+        fill: none;
+        stroke: var(--teal);
+        stroke-width: 1.6;
+        stroke-dasharray: 6 360;
+        stroke-linecap: round;
+        filter: drop-shadow(0 0 4px rgba(45, 212, 191, 0.7));
+        animation: travel 4.5s linear infinite;
+      }
+      .pulse-line.amber {
+        stroke: var(--amber);
+        filter: drop-shadow(0 0 4px rgba(245, 166, 35, 0.7));
+      }
+      .pulse-line.d2 {
+        animation-delay: -1.4s;
+      }
+      .pulse-line.d3 {
+        animation-delay: -2.8s;
+      }
+      .pulse-line.d4 {
+        animation-delay: -0.7s;
+      }
+      @keyframes travel {
+        0% {
+          stroke-dashoffset: 0;
+        }
+        100% {
+          stroke-dashoffset: -720;
+        }
+      }
+
+      .node circle.core {
+        fill: var(--surface);
+        stroke: var(--border);
+        stroke-width: 1.4;
+      }
+      .node circle.ring {
+        fill: none;
+        stroke: var(--teal);
+        stroke-width: 1;
+        opacity: 0;
+        animation: ring 3s ease-out infinite;
+      }
+      .node.amber circle.ring {
+        stroke: var(--amber);
+      }
+      .node.d2 circle.ring {
+        animation-delay: 0.6s;
+      }
+      .node.d3 circle.ring {
+        animation-delay: 1.2s;
+      }
+      .node.d4 circle.ring {
+        animation-delay: 1.8s;
+      }
+      @keyframes ring {
+        0% {
+          r: 7;
+          opacity: 0.55;
+        }
+        100% {
+          r: 22;
+          opacity: 0;
+        }
+      }
+      .node text {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9.5px;
+        fill: var(--text-faint);
+        letter-spacing: 0.04em;
+      }
+      .node text.state {
+        fill: var(--text-muted);
+        font-size: 9px;
+      }
+
+      .ticker {
+        border-top: 1px solid var(--border-soft);
+        padding-top: 18px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11.5px;
+        color: var(--text-faint);
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .ticker-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .ticker-row .tag {
+        color: var(--teal);
+        width: 78px;
+        flex-shrink: 0;
+      }
+      .ticker-row.amber .tag {
+        color: var(--amber);
+      }
+      .ticker-row .val {
+        color: var(--text-muted);
+      }
+
+      .form-side {
+        flex: 1;
+        max-width: 480px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        background: var(--bg);
+      }
+      .form-card {
+        width: 100%;
+        max-width: 340px;
+      }
+
+      .form-card h2 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 23px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .form-card .sub {
+        font-size: 13.5px;
+        color: var(--text-muted);
+        margin-bottom: 34px;
+      }
+
+      .field {
+        margin-bottom: 18px;
+      }
+      .field label {
+        display: block;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--text-muted);
+        margin-bottom: 7px;
+        letter-spacing: 0.01em;
+      }
+      .input-wrap {
+        position: relative;
+      }
+      .input-wrap input {
+        width: 100%;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 11px 13px;
+        font-size: 14px;
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        transition:
+          border-color 0.15s ease,
+          background 0.15s ease;
+      }
+      .input-wrap input::placeholder {
+        color: var(--text-faint);
+      }
+      .input-wrap input:hover {
+        border-color: #2a3858;
+      }
+      .input-wrap input:focus {
+        outline: none;
+        border-color: var(--teal-dim);
+        background: #0e1a30;
+      }
+      .input-wrap input:focus-visible {
+        outline: 2px solid var(--teal);
+        outline-offset: 2px;
+      }
+
+      .toggle-pass {
+        position: absolute;
+        right: 11px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--text-faint);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        padding: 4px 6px;
+      }
+      .toggle-pass:hover {
+        color: var(--text-muted);
+      }
+
+      .btn-enter {
+        width: 100%;
+        background: var(--teal);
+        color: #06241f;
+        border: none;
+        border-radius: 8px;
+        padding: 12.5px;
+        font-family: "Inter", sans-serif;
+        font-weight: 600;
+        font-size: 14.5px;
+        cursor: pointer;
+        margin-top: 12px;
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.15s ease,
+          background 0.15s ease;
+        box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4);
+      }
+      .btn-enter:hover {
+        background: #3fe0ca;
+        box-shadow: 0 4px 22px -4px rgba(45, 212, 191, 0.45);
+      }
+      .btn-enter:active {
+        transform: translateY(1px);
+      }
+      .btn-enter.error {
+        background: var(--danger);
+        color: #fff;
+      }
+      .btn-enter.error:hover {
+        background: #ef6459;
+        box-shadow: 0 4px 22px -4px rgba(226, 87, 76, 0.45);
+      }
+
+      .footnote {
+        margin-top: 36px;
+        font-size: 11.5px;
+        line-height: 1.6;
+        color: var(--text-faint);
+        text-align: center;
+      }
+      .footnote b {
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      @media (max-width: 900px) {
+        body {
+          flex-direction: column;
+          overflow: auto;
+          height: auto;
+        }
+        .stage {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+          padding: 36px 28px;
+          min-height: 340px;
+        }
+        .network-wrap {
+          margin: 20px -4px;
+        }
+        .form-side {
+          max-width: none;
+          padding: 36px 24px 56px;
+        }
+        .ticker {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="stage">
+      <div class="brand">
+        <img src="enel-logo.png" alt="Enel" class="brand-logo" />
+      </div>
+
+      <div class="stage-copy">
+        <div class="eyebrow">Portal de BI Integrado</div>
+        <h1>Métricas & Analytics.<br /><em>Por Gabriel Amaral.</em></h1>
+        <p>
+          Painel unificado de Business Intelligence para as concessões de São
+          Paulo, Rio de Janeiro e Ceará — telemetria de consumo, carga e
+          inteligência operacional num só lugar.
+        </p>
+      </div>
+
+      <div class="network-wrap">
+        <svg viewBox="0 0 520 260" preserveAspectRatio="xMidYMid meet">
+          <path class="grid-line" d="M70 60 L230 40 L400 70" />
+          <path class="grid-line" d="M70 60 L120 180" />
+          <path class="grid-line" d="M230 40 L260 150" />
+          <path class="grid-line" d="M400 70 L380 190" />
+          <path class="grid-line" d="M120 180 L260 150 L380 190" />
+          <path class="grid-line" d="M260 150 L260 220" />
+          <path class="grid-line" d="M40 220 L120 180" />
+          <path class="grid-line" d="M380 190 L460 230" />
+
+          <path class="pulse-line" d="M70 60 L230 40 L400 70" />
+          <path class="pulse-line amber d2" d="M120 180 L260 150 L380 190" />
+          <path class="pulse-line d3" d="M70 60 L120 180" />
+          <path class="pulse-line amber d4" d="M400 70 L380 190 L460 230" />
+
+          <g class="node" transform="translate(70,60)">
+            <circle class="ring" r="7" />
+            <circle class="core" r="5" />
+            <text x="-22" y="-12" class="state">SP</text>
+            <text x="-30" y="20">DATA-114</text>
+          </g>
+          <g class="node d2" transform="translate(230,40)">
+            <circle class="ring" r="7" />
+            <circle class="core" r="5" />
+            <text x="-12" y="-12" class="state">SP</text>
+            <text x="-20" y="20">BI-METRIC-08</text>
+          </g>
+          <g class="node amber d3" transform="translate(400,70)">
+            <circle class="ring" r="7" />
+            <circle class="core" r="5" />
+            <text x="10" y="-12" class="state">RJ</text>
+            <text x="10" y="6">DATA-22</text>
+          </g>
+          <g class="node d4" transform="translate(120,180)">
+            <circle class="ring" r="7" />
+            <circle class="core" r="5" />
+            <text x="-32" y="22">PIPELINE-31</text>
+          </g>
+          <g class="node" transform="translate(260,150)">
+            <circle class="ring" r="7" />
+            <circle class="core" r="5" />
+            <text x="10" y="4">DATA-09</text>
+            <text x="10" y="18" class="state">CE</text>
+          </g>
+          <g class="node amber" transform="translate(380,190)">
+            <circle class="ring" r="7" />
+            <circle class="core" r="5" />
+            <text x="10" y="6">BI-LOAD-17</text>
+          </g>
+          <g class="node" transform="translate(40,220)">
+            <circle class="ring" r="7" />
+            <circle class="core" r="5" />
+            <text x="-10" y="22">DATA-03</text>
+          </g>
+          <g class="node" transform="translate(460,230)">
+            <circle class="ring" r="7" />
+            <circle class="core" r="5" />
+            <text x="-34" y="22">RJ · cluster</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="ticker">
+        <div class="ticker-row">
+          <span class="tag">SP · ATIVOS</span
+          ><span class="val">ingestão nominal · processamento 94%</span>
+        </div>
+        <div class="ticker-row amber">
+          <span class="tag">RJ · ETLS</span
+          ><span class="val">atualização agendada · 02:00–03:15</span>
+        </div>
+        <div class="ticker-row">
+          <span class="tag">CE · METRICS</span
+          ><span class="val">status sincronizado · integridade 100%</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-side">
+      <div class="form-card">
+        <h2>Acessar Dashboards</h2>
+        <p class="sub">Entre com suas credenciais para acessar os BI.</p>
+
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="login">Login</label>
+            <div class="input-wrap">
+              <input
+                type="text"
+                id="login"
+                name="login"
+                placeholder="Ex: gabriel.amaral"
+                autocomplete="username"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="password">Senha</label>
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="••••••••••"
+                autocomplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                class="toggle-pass"
+                id="togglePass"
+                aria-label="Mostrar senha"
+              >
+                MOSTRAR
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-enter">Entrar</button>
+        </form>
+
+        <p class="footnote">
+          Acesso corporativo restrito.<br />Desenvolvido por
+          <b>Gabriel Amaral</b>
+        </p>
+      </div>
+    </section>
+
+    <script>
+      // ==========================================
+      // CADASTRO DE LOGINS E SENHAS CORPORATIVAS
+      // ==========================================
+      const USUARIOS_PERMITIDOS = {
+        "gabriel.amaral": "enel2026",
+        admin: "bi@enel",
+        "gabriel.amaral@enel.com": "senha123",
+        // Adicione mais logins e senhas aqui seguindo o padrão acima
+      };
+
+      const togglePass = document.getElementById("togglePass");
+      const passInput = document.getElementById("password");
+      togglePass.addEventListener("click", () => {
+        const isHidden = passInput.type === "password";
+        passInput.type = isHidden ? "text" : "password";
+        togglePass.textContent = isHidden ? "OCULTAR" : "MOSTRAR";
+      });
+
+      document.getElementById("loginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const loginDigitado = document.getElementById("login").value.trim();
+        const senhaDigitada = document.getElementById("password").value;
+        const btn = e.target.querySelector(".btn-enter");
+
+        btn.textContent = "Verificando…";
+        btn.disabled = true;
+        btn.classList.remove("error");
+
+        setTimeout(() => {
+          // Validação dos dados digitados com o objeto de usuários lá de cima
+          if (
+            USUARIOS_PERMITIDOS[loginDigitado] &&
+            USUARIOS_PERMITIDOS[loginDigitado] === senhaDigitada
+          ) {
+            btn.textContent = "Sucesso!";
+            btn.style.background = "var(--teal)";
+
+            // Sucesso! Redireciona para a tela de menu (escolha do BI)
+            window.location.href = "menu.html";
+          } else {
+            // Se errar o login ou senha
+            btn.textContent = "Dados incorretos";
+            btn.classList.add("error");
+            btn.disabled = false;
+          }
+        }, 1200);
+      });
+    </script>
+  </body>
+</html>

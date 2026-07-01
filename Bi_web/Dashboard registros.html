@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enel Brasil · Registros BI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0f1c;
+        --panel: #0d1426;
+        --surface: #111b30;
+        --surface-2: #0f1830;
+        --border: #1f2c47;
+        --border-soft: #172238;
+        --text: #eaf0fb;
+        --text-muted: #7e8caa;
+        --text-faint: #4c5972;
+        --teal: #2dd4bf;
+        --amber: #f5a623;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      *:focus-visible {
+        outline: 2px solid var(--teal);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      /* ===== TOP BAR ===== */
+      .topbar {
+        height: 64px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 28px;
+        background: var(--panel);
+        border-bottom: 1px solid var(--border);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-logo {
+        height: 40px;
+        width: auto;
+        display: block;
+      }
+
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .user-chip {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 13px;
+        color: var(--text-muted);
+        font-family: "JetBrains Mono", monospace;
+        margin-right: 8px;
+      }
+      .user-chip .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--teal);
+        box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.5);
+        animation: livedot 2.2s ease-out infinite;
+      }
+      @keyframes livedot {
+        0% {
+          box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.55);
+        }
+        70% {
+          box-shadow: 0 0 0 7px rgba(45, 212, 191, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(45, 212, 191, 0);
+        }
+      }
+      .btn-ghost {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        padding: 7px 14px;
+        transition:
+          border-color 0.15s ease,
+          color 0.15s ease,
+          background 0.15s ease;
+      }
+      .btn-ghost:hover {
+        color: var(--text);
+        border-color: #2a3858;
+        background: var(--surface-2);
+      }
+
+      /* ===== PAGE BODY ===== */
+      .page {
+        flex: 1;
+        padding: 28px 32px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        min-height: 0;
+      }
+      .page-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .page-head h1 {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        font-size: 21px;
+        letter-spacing: -0.01em;
+      }
+      .page-head p {
+        margin-top: 5px;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .report-frame {
+        flex: 1;
+        min-height: 0;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        display: flex;
+      }
+      .report-frame .frame-inner {
+        position: relative;
+        width: 100%;
+        border-radius: 9px;
+        overflow: hidden;
+        background: #0c1426;
+      }
+      .report-frame iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      /* placeholder state, shown until the real embed link is added */
+      .placeholder {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-align: center;
+        padding: 24px;
+      }
+      .placeholder .icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--surface-2);
+        border: 1px solid var(--border-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 6px;
+      }
+      .placeholder h3 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .placeholder p {
+        font-size: 12.5px;
+        color: var(--text-muted);
+        max-width: 360px;
+        line-height: 1.55;
+      }
+      .placeholder code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--amber);
+        background: var(--surface-2);
+        border: 1px solid var(--border-soft);
+        padding: 2px 6px;
+        border-radius: 5px;
+      }
+
+      .footnote {
+        font-size: 11px;
+        color: var(--text-faint);
+        font-family: "JetBrains Mono", monospace;
+        text-align: center;
+      }
+
+      @media (max-width: 700px) {
+        .topbar {
+          padding: 0 16px;
+        }
+        .page {
+          padding: 18px 16px 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <img src="enel-logo.png" alt="Enel" class="brand-logo" />
+      </div>
+      <div class="topbar-right">
+        <div class="user-chip"><span class="dot"></span>gabriel.amaral</div>
+        <a href="menu.html" class="btn-ghost">Trocar BI</a>
+        <a href="login.html" class="btn-ghost">Sair</a>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <div>
+          <h1>Registros BI</h1>
+          <p>Histórico e registros detalhados de chamados e ocorrências.</p>
+        </div>
+      </div>
+
+      <div class="report-frame">
+        <div class="frame-inner">
+          <!--
+            Troque o bloco abaixo pelo <iframe> real do Power BI assim que tiver o link de
+            incorporação do relatório "Registros BI" (mesmo formato do Centro de Excelência).
+          -->
+          <div class="placeholder">
+            <div class="icon">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                <path
+                  d="M5 3h11l3 3v15H5z"
+                  stroke="#f5a623"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 11h6M9 15h6"
+                  stroke="#f5a623"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <h3>Relatório ainda não conectado</h3>
+            <p>
+              Cole o link de incorporação do Power BI no atributo
+              <code>src</code> do iframe, dentro do arquivo
+              dashboard-registros.html.
+            </p>
+          </div>
+
+          <!--
+          <iframe
+            title="Registros Bi"
+            src="COLE_AQUI_O_LINK_DE_INCORPORACAO"
+            frameborder="0"
+            allowFullScreen="true"
+          ></iframe>
+          -->
+        </div>
+      </div>
+
+      <p class="footnote">
+        Acesso corporativo restrito · Desenvolvido por Gabriel Amaral
+      </p>
+    </main>
+  </body>
+</html>
